@@ -116,9 +116,8 @@ class Api {
 //создание элемента класса API для подключения страницы к серверу
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-77',
+  url: 'https://api.mesto.auth.nomoredomainsmonster.ru/',
   headers: {
-    authorization: 'cd6216f4-847a-4421-99d4-0436178223c8',
     'Content-Type': 'application/json'
   }
 });
