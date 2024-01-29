@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.mesto.auth.nomoredomainsmonster.ru/';
+export const BASE_URL = 'https://api.mesto.auth.nomoredomainsmonster.ru';
 
 const checkRes = (res) => {
   if (res.ok) {

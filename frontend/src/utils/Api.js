@@ -116,7 +116,7 @@ class Api {
 //создание элемента класса API для подключения страницы к серверу
 
 const api = new Api({
-  url: 'https://api.mesto.auth.nomoredomainsmonster.ru/',
+  url: 'https://api.mesto.auth.nomoredomainsmonster.ru',
   headers: {
     'Content-Type': 'application/json'
   }
