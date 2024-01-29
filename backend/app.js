@@ -10,6 +10,7 @@ const handleError = require('./middlewares/handleError');
 const NotFoundError = require('./errors/NotFoundError');
 const { validateSignUp, validateSignIn } = require('./middlewares/validation');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -20,11 +21,11 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-const allowedCors = [
-  'https://mesto.auth.nomoredomainsmonster.ru',
-  'http://mesto.auth.nomoredomainsmonster.ru',
-  'localhost:3000',
-];
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 
 const app = express();
 
@@ -39,14 +40,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(limiter);
 
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  console.log(origin);
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
