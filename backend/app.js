@@ -21,13 +21,9 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-const corsOptions = {
-  origin: '*',
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-
 const app = express();
+
+app.use(cors());
 
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
@@ -39,8 +35,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(limiter);
-
-app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
