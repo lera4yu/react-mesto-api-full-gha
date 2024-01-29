@@ -23,7 +23,7 @@ const limiter = rateLimit({
 const allowedCors = [
   'https://mesto.auth.nomoredomainsmonster.ru',
   'http://mesto.auth.nomoredomainsmonster.ru',
-  'localhost:3000'
+  'localhost:3000',
 ];
 
 const app = express();
@@ -41,6 +41,7 @@ app.use(limiter);
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
+  console.log(origin);
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
