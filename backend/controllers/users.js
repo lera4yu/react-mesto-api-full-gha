@@ -5,6 +5,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const InputError = require('../errors/InputError');
 const AuthorizationError = require('../errors/AuthorizationError');
 const DuplicateError = require('../errors/DuplicateError');
+const { getSecret } = require('../utils/secrets');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -107,7 +108,7 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       if (user) {
-        const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
+        const token = jwt.sign({ _id: user._id }, getSecret(), { expiresIn: '7d' });
         res.send({ token });
       } else {
         throw new AuthorizationError('Неправильные почта или пароль');

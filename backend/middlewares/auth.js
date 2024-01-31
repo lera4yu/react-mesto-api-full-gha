@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const AuthorizationError = require('../errors/AuthorizationError');
-const { NODE_ENV, SECRET_SIGNING_KEY } = require('../utils/constants');
+const { getSecret } = require('../utils/secrets');
 
 const extractBearerToken = function (header) {
   return header.replace('Bearer ', '');
@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? SECRET_SIGNING_KEY : 'dev-secret');
+    payload = jwt.verify(token, getSecret());
   } catch (err) {
     next(new AuthorizationError('Неправильные почта или пароль'));
   }
