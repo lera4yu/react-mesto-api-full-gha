@@ -1,4 +1,4 @@
-class Api {
+export class Api {
   constructor({ url, headers }) {
     this._url = url;
     this._headers = headers;
@@ -10,7 +10,7 @@ class Api {
       fetch(`${this._url}/cards`, {
         headers: this._headers,
         method: 'GET'
-      }))
+      })).then((res) => res.data)
   };
 
   //находим информацию о юзере через API
@@ -19,7 +19,7 @@ class Api {
       fetch(`${this._url}/users/me`, {
         headers: this._headers,
         method: 'GET'
-      }))
+      })).then((res) => res.data)
   };
 
   //функция для хэндлера попапа удаления карточки
@@ -28,7 +28,7 @@ class Api {
       fetch(`${this._url}/cards/${cardId}`, {
         headers: this._headers,
         method: 'DELETE'
-      }))
+      })).then((res) => res.data)
   };
 
   //обновление информации о пользователе на сервере 
@@ -41,7 +41,7 @@ class Api {
           name: userInfo.name,
           about: userInfo.about
         })
-      }))
+      })).then((res) => res.data)
   };
 
   //обновление аватара профиля
@@ -53,7 +53,7 @@ class Api {
         body: JSON.stringify({
           avatar: avatarUrl
         })
-      }))
+      })).then((res) => res.data)
   };
 
   //добавление новой карточки на сервер
@@ -66,7 +66,7 @@ class Api {
           name: name,
           link: link
         })
-      }))
+      })).then((res) => res.data)
   };
 
   //проверка статуса
@@ -88,7 +88,7 @@ class Api {
       fetch(`${this._url}/cards/${cardId}/likes`, {
         headers: this._headers,
         method: 'PUT'
-      }))
+      })).then((res) => res.data)
   }
 
   //удаление лайка на карточке
@@ -98,7 +98,7 @@ class Api {
       fetch(`${this._url}/cards/${cardId}/likes`, {
         headers: this._headers,
         method: 'DELETE'
-      }))
+      })).then((res) => res.data)
   }
 
   //toggle лайка на карточке
@@ -111,15 +111,3 @@ class Api {
     }
   }
 }
-
-
-//создание элемента класса API для подключения страницы к серверу
-
-const api = new Api({
-  url: 'https://api.mesto.auth.nomoredomainsmonster.ru',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-export default api;

@@ -17,10 +17,10 @@ function Card({ card, onCardClick, onDeleteClick, onLikeClick }) {
   }
 
   //добавляем кнопку удаления только для своих карточек
-  const isOwn = card.owner._id === currentUser._id;
+  const isOwn = card.owner === currentUser._id;
 
   //проверяем, ставили ли мы лайки этой карточке
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
+  const isLiked = card.likes.some(i => i === currentUser._id);
   const cardLikeButtonClassName = (
     `element__like-btn ${isLiked && 'element__like-btn_active'}`
   );

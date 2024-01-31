@@ -38,6 +38,7 @@ const Register = ({ onRegister, isLoading }) => {
           placeholder="Пароль"
           className="authentication__form-input"
           name="password"
+          minLength={6}
           value={formValue.password}
           required={true}
           onChange={handleChange} />

@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 import PopupWithForm from './components/PopupWithForm';
 import ImagePopup from './components/ImagePopup';
 import { CurrentUserContext } from './contexts/CurrentUserContext';
-import api from './utils/Api';
+import { Api } from './utils/Api';
 import EditProfilePopup from './components/EditProfilePopup';
 import EditAvatarPopup from './components/EditAvatarPopup';
 import AddPlacePopup from './components/AddPlacePopup';
@@ -60,27 +60,39 @@ function App() {
 
   React.useEffect(() => {
     handleTokenCheck();
-  }, []);
+  }, [loggedIn]);
+
+  //создание элемента класса API для подключения страницы к серверу
+  const api = new Api({
+    url: 'https://api.mesto.auth.nomoredomainsmonster.ru',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    }
+  });
 
   React.useEffect(() => {
     if (loggedIn) {
-    api.getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) =>
-        console.log(`Получение информации о пользователе привело к ошибке ${err}`)
-      )
-  }}, [loggedIn]);
+      api.getUserInfo()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch((err) =>
+          console.log(`Получение информации о пользователе привело к ошибке ${err}`)
+        )
+    }
+  }, [loggedIn]);
 
   React.useEffect(() => {
-    api.getInitialCards()
-      .then((res) => {
-        setCards(res);
-      })
-      .catch((err) =>
-        console.log(`Получение информации о дефолтных карточках привело к ошибке ${err}`));
-  }, []);
+    if (loggedIn) {
+      api.getInitialCards()
+        .then((res) => {
+          setCards(res);
+        })
+        .catch((err) =>
+          console.log(`Получение информации о дефолтных карточках привело к ошибке ${err}`));
+    }
+  }, [loggedIn]);
 
   function handleRegister(email, password) {
     setLoading(true);
@@ -136,7 +148,7 @@ function App() {
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, !isLiked)
@@ -229,21 +241,21 @@ function App() {
           />
           <meta name="keywords" content="Путешествия, фотографии" />
           <meta name="author" content="Валерия Юдина" />
-          <Header email={userEmail} signOut = {handleSignOut} />
+          <Header email={userEmail} signOut={handleSignOut} />
           <Routes>
             <Route path="/" element={<ProtectedRouteElement element={Main} cards={cards} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick} onLikeClick={handleCardLike} onDeleteClick={handleCardDelete} loggedIn={loggedIn} />} />
-            <Route path="/sign-in" element={<Login handleLogin={handleLogin} isLoading = {isLoading}/>} />
-            <Route path="/sign-up" element={<Register onRegister={handleRegister} isLoading = {isLoading}/>} />
+            <Route path="/sign-in" element={<Login handleLogin={handleLogin} isLoading={isLoading} />} />
+            <Route path="/sign-up" element={<Register onRegister={handleRegister} isLoading={isLoading} />} />
           </Routes>
           <InfoTooltip isOpen={isInfoToolTipOpen} isSuccess={isRegSuccess} onClose={closeAllPopups} />
           {loggedIn && <Footer />}
-          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading = {isLoading}/>
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddNewPlace={handleAddPlaceSubmit} isLoading = {isLoading}/>
+          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddNewPlace={handleAddPlaceSubmit} isLoading={isLoading} />
           {selectedCard.name && selectedCard.link ? (<ImagePopup card={selectedCard} onClose={closeAllPopups} />) : null}
           <PopupWithForm name='delete-card' title='Вы уверены?' buttonText="Да" buttonClass=" btnPopup-delete-card" />
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar} isLoading = {isLoading}/>
+            onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
         </div>
       </div>
     </CurrentUserContext.Provider>
