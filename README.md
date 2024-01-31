@@ -11,6 +11,6 @@
 
 IP-адрес 158.160.101.213
 
-Frontend https://github.com/lera4yu/react-mesto-auth
+Frontend https://mesto.auth.nomoredomainsmonster.ru
 
-Backend https://github.com/lera4yu/express-mesto-gha
+Backend https://api.mesto.auth.nomoredomainsmonster.ru
