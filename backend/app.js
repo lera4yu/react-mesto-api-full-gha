@@ -13,8 +13,6 @@ const NotFoundError = require('./errors/NotFoundError');
 const { validateSignUp, validateSignIn } = require('./middlewares/validation');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-console.log(process.env.NODE_ENV); // production
-
 const { PORT = 3000 } = process.env;
 
 const limiter = rateLimit({
